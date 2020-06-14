@@ -11,6 +11,7 @@ Pushka::Pushka(Texture & texture, int x, int y)
 	sprite.setPosition(x, y);
 }
 
+
 void Pushka::set_x(int x)
 {
 	this->x = x;
@@ -108,28 +109,28 @@ bool Pushka::fire(Yadro * yadro, int i, Pushka * gun)
 		time += 0.001;
 		if (i % 2 == 0)
 		{
-			yadro->set_dx(time* yadro->get_V0()*cos(PI*yadro->get_alpha() / 180));
+			yadro->set_dx(time* yadro->get_V0()*cos(PI*yadro->get_alpha() / 180));//–асчет  dx дл€ gun1 
 		}
 		else {
-			yadro->set_dx(-time * yadro->get_V0()*cos(PI*yadro->get_alpha() / 180));
+			yadro->set_dx(-time * yadro->get_V0()*cos(PI*yadro->get_alpha() / 180));//–асчет dx дл€ gun2
 		}
-		yadro->set_x(yadro->get_x() + yadro->get_dx());
-		yadro->set_dy(-time * yadro->get_V0()*sin(PI*yadro->get_alpha() / 180) + 0.5*9.81*time*time);
-		yadro->set_y(yadro->get_y() + yadro->get_dy());
-		yadro->sprite.setPosition(yadro->get_x(), yadro->get_y());
-		if ((yadro->get_x() > 1300 || yadro->get_x() < 0) && (yadro->get_y() > 600))
+		yadro->set_x(yadro->get_x() + yadro->get_dx());//вычисл€ем  координату x 
+		yadro->set_dy(-time * yadro->get_V0()*sin(PI*yadro->get_alpha() / 180) + 0.5*9.81*time*time);///–асчет dy дл€ gun
+		yadro->set_y(yadro->get_y() + yadro->get_dy());//вычисл€ем  координату y
+		yadro->sprite.setPosition(yadro->get_x(), yadro->get_y());//устанавливаем смещени€ €дра
+		if ((yadro->get_x() > 1300 || yadro->get_x() < 0) && (yadro->get_y() > 600))// проверка на вылет €дра за пределы окна
 		{
 			isShoot = false;
 			time = 0;
-			delete yadro;
+			yadro->set_life(false);
 			return true;
 		}
-		if (yadro->getRect().intersects(gun->getRect()))
+		if (yadro->getRect().intersects(gun->getRect()))//проверка на попадание
 		{
 			isShoot = false;
 			gun->set_life(false);
 			time = 0;
-			delete yadro;
+			yadro->set_life(false);
 			return false;
 		}
 	}
@@ -138,6 +139,7 @@ bool Pushka::fire(Yadro * yadro, int i, Pushka * gun)
 
 void Pushka::move()
 {
+	//ѕеремещени€ пушки влево
 	if (state == 0)
 	{
 		dx = -1;
@@ -145,6 +147,7 @@ void Pushka::move()
 		sprite.setPosition(x, y);
 
 	}
+	//ѕеремещени€ пушки вправо
 	if (state == 1)
 	{
 		dx = 1;
